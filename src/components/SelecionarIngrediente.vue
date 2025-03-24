@@ -1,32 +1,34 @@
 <script lang="ts">
-import { obterCategorias } from '@/http';
-import type ICategoria from '@/interfaces/ICategoria';
+import { obterCategorias } from '@/http'
+import type ICategoria from '@/interfaces/ICategoria'
+import CardCategoria from './CardCategoria.vue'
 
-    export default {
-        data() {
-            return {
-                categorias: [] as ICategoria[]
-            }
-        },
-        async created() {
-            this.categorias = await obterCategorias();
-        },
+export default {
+  components: { CardCategoria },
+  data() {
+    return {
+      categorias: [] as ICategoria[],
     }
+  },
+  async created() {
+    this.categorias = await obterCategorias()
+  },
+}
 </script>
 
 <template>
-    <section class="selecionar-ingredientes">
-        <h1 class="cabecalho titulo-ingredientes">Ingredientes</h1>
-        <p class="paragrafo-lg instrucoes">Selecione abaixo os ingredientes que você quer usar nesta receita:</p>
-        <ul class="categorias">
-            <li v-for="categoria in categorias" :key="categoria.nome">
-                {{ categoria }}
-            </li>
-        </ul>
-        <p class="paragrafo dica">
-            *Atenção: Considermos que você tem em casa sal, pimenta e água
-        </p>
-    </section>
+  <section class="selecionar-ingredientes">
+    <h1 class="cabecalho titulo-ingredientes">Ingredientes</h1>
+    <p class="paragrafo-lg instrucoes">
+      Selecione abaixo os ingredientes que você quer usar nesta receita:
+    </p>
+    <ul class="categorias">
+      <li v-for="categoria in categorias" :key="categoria.nome">
+        <CardCategoria :categoria="categoria" />
+      </li>
+    </ul>
+    <p class="paragrafo dica">*Atenção: Considermos que você tem em casa sal, pimenta e água</p>
+  </section>
 </template>
 
 <style scoped>
@@ -37,7 +39,7 @@ import type ICategoria from '@/interfaces/ICategoria';
 }
 
 .titulo-ingredientes {
-  color: var(--verde-medio, #3D6D4A);
+  color: var(--verde-medio, #3d6d4a);
   display: block;
   margin-bottom: 1.5rem;
 }
