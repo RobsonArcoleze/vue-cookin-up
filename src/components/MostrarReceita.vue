@@ -4,9 +4,10 @@ import type ICategoria from '@/interfaces/ICategoria';
 import { onMounted, ref } from 'vue';
 import CardReceita from '@/components/CardReceita.vue';
 import BotaoPrincipal from '@/components/BotaoPrincipal.vue';
+import { comparaItemLista } from '@/utils/ListasUltil';
 
-    defineProps<{
-        ingredientes: String[]
+    const props = defineProps<{
+        ingredientes: string[]
     }>();
 
     const receitas = ref<ICategoria[]>([]);
@@ -14,7 +15,8 @@ import BotaoPrincipal from '@/components/BotaoPrincipal.vue';
     onMounted(async () => {
         const receitaResponse = await obterReceitas();
         receitas.value = receitaResponse.filter(receita => {
-            
+            const possoFazerReceita = comparaItemLista(receita.ingredientes, props.ingredientes )
+            return possoFazerReceita;
         })
     })
 
