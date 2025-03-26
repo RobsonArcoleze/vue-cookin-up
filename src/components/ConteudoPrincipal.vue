@@ -20,13 +20,7 @@ import MostrarReceita from './MostrarReceita.vue';
     }
 
     function navegar(pagina: Pagina){
-      console.log('estou navegando');
-      
-      console.log('pagina: ' + pagina);
-      
       conteudo.value = pagina;
-      console.log(conteudo.value);
-      
     }
   
 </script>
@@ -35,12 +29,18 @@ import MostrarReceita from './MostrarReceita.vue';
   <main class="conteudo-principal">
     <SuaLista :ingredientes="ingredientes"/>
 
-    <SelecionarIngrediente v-if="conteudo === 'SelecionarIngrediente'"
-    @adicionar-ingrediente="adicionarNaLista($event)"
-    @remover-ingrediente="removerIngrediente($event)" 
-    @buscar-receitas="navegar('MostrarReceitas')"/>
+    <KeepAlive include="SelecionarIngrediente">
+      <SelecionarIngrediente v-if="conteudo === 'SelecionarIngrediente'"
+      @adicionar-ingrediente="adicionarNaLista($event)"
+      @remover-ingrediente="removerIngrediente($event)" 
+      @buscar-receitas="navegar('MostrarReceitas')"/>
+  
+      <MostrarReceita
+       v-else-if="conteudo === 'MostrarReceitas'"
+       @editar-receitas="navegar('SelecionarIngrediente')"
+       :ingredientes="ingredientes"/>
+    </KeepAlive>
 
-    <MostrarReceita v-else-if="conteudo === 'MostrarReceitas'"/>
 
   </main>
   <Rodape />
