@@ -1,33 +1,35 @@
-<script lang="ts">
+<script setup lang="ts">
+import BotaoPrincipal from '@/components/BotaoPrincipal.vue'
 import SelecionarIngrediente from './SelecionarIngrediente.vue'
+import SuaLista from './SuaLista.vue';
 import Tag from './Tag.vue'
+import Rodape from '@/components/Rodape.vue';
+import { ref } from 'vue';
 
-export default {
-  data() {
-    return {
-      ingredientes: ['Alho', 'Cebola', 'Orégano'],
+
+    const ingredientes = ref<string[]>([]);
+
+
+    function adicionarNaLista(ingrediente: string){
+      ingredientes.value.push(ingrediente);
     }
-  },
-  components: { SelecionarIngrediente, Tag },
-}
+
+    function removerIngrediente(ingrediente: string){
+      ingredientes.value = ingredientes.value.filter(ing => ing !== ingrediente)
+    }
+  
 </script>
 
 <template>
   <main class="conteudo-principal">
-    <section>
-      <span class="subtitulo-lg sua-lista-texto">Sua Lista:</span>
-      <ul v-if="ingredientes.length" class="ingredientes-sua-lista">
-        <li v-for="ingrediente of ingredientes" :key="ingrediente">
-          <Tag :texto="ingrediente" ativa />
-        </li>
-      </ul>
-      <p v-else class="paragrafo lista-vazia">
-        <img src="../assets/images/icones/lista-vazia.svg" alt="Icone de Pesquisa" />
-        Sua lista está vazia, selecione ingredientes para iniciar.
-      </p>
-    </section>
+    <SuaLista :ingredientes="ingredientes"/>
 
-    <SelecionarIngrediente />
+    <SelecionarIngrediente 
+    @adicionar-ingrediente="adicionarNaLista($event)"
+    @remover-ingrediente="removerIngrediente($event)" />
+
+    <BotaoPrincipal texto="Buscar Receitas!" />
+    <Rodape />
   </main>
 </template>
 
