@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import BotaoPrincipal from '@/components/BotaoPrincipal.vue'
 import SelecionarIngrediente from './SelecionarIngrediente.vue'
 import SuaLista from './SuaLista.vue';
-import Tag from './Tag.vue'
 import Rodape from '@/components/Rodape.vue';
 import { ref } from 'vue';
+import MostrarReceita from './MostrarReceita.vue';
 
 
+    type Pagina = 'SelecionarIngrediente' | 'MostrarReceitas';
     const ingredientes = ref<string[]>([]);
+    const conteudo = ref<Pagina>('SelecionarIngrediente')
 
 
     function adicionarNaLista(ingrediente: string){
@@ -17,6 +18,16 @@ import { ref } from 'vue';
     function removerIngrediente(ingrediente: string){
       ingredientes.value = ingredientes.value.filter(ing => ing !== ingrediente)
     }
+
+    function navegar(pagina: Pagina){
+      console.log('estou navegando');
+      
+      console.log('pagina: ' + pagina);
+      
+      conteudo.value = pagina;
+      console.log(conteudo.value);
+      
+    }
   
 </script>
 
@@ -24,13 +35,15 @@ import { ref } from 'vue';
   <main class="conteudo-principal">
     <SuaLista :ingredientes="ingredientes"/>
 
-    <SelecionarIngrediente 
+    <SelecionarIngrediente v-if="conteudo === 'SelecionarIngrediente'"
     @adicionar-ingrediente="adicionarNaLista($event)"
-    @remover-ingrediente="removerIngrediente($event)" />
+    @remover-ingrediente="removerIngrediente($event)" 
+    @buscar-receitas="navegar('MostrarReceitas')"/>
 
-    <BotaoPrincipal texto="Buscar Receitas!" />
-    <Rodape />
+    <MostrarReceita v-else-if="conteudo === 'MostrarReceitas'"/>
+
   </main>
+  <Rodape />
 </template>
 
 <style scoped>
